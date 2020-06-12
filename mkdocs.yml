@@ -1,0 +1,74 @@
+site_name: Teached
+site_url: https://example.com
+site_author: Mohamed Nesredin
+site_description: >-
+  online learning platform
+
+repo_name: Mohamed-Kaizen/teached
+repo_url: https://github.com/Mohamed-Kaizen/teached/
+edit_uri: ''
+
+copyright: Copyright &copy; 2020 Mohamed Nesredin
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github-alt
+  features:
+    - tabs
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      type: timeago
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+      watch:
+        - src/teached
+
+nav:
+  - Home: 'index.md'
+  - Reference:
+      - Main: "reference/main.md"
+      - Manage: "reference/manage.md"
+      - Settings: "reference/settings.md"
+      - Shortcuts: "reference/shortcuts.md"
+      - Users:
+          - Base: "reference/users/base.md"
+          - Depends: "reference/users/depends.md"
+          - Middleware: "reference/users/middleware.md"
+          - Models: "reference/users/models.md"
+          - PWNED: "reference/users/pwned.md"
+          - Schema: "reference/users/schema.md"
+          - Utils: "reference/users/utils.md"
+          - Validators: "reference/users/validators.md"
+
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      linenums: true
+  - toc:
+      permalink: true
+  - pymdownx.superfences:
+      custom_fences:
+          - name: mermaid
+            class: mermaid
+            format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tabbed
+
+
+extra_css:
+    - 'css/termynal.css'
+    - 'css/custom.css'
+
+extra_javascript:
+    - 'https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js'
+    - 'js/termynal.js'
+    - 'js/custom.js'
