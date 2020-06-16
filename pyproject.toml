@@ -13,8 +13,8 @@ keywords = ["teached"]
 [tool.poetry.dependencies]
 python = "^3.7"
 confusable_homoglyphs = "^3.2.0"
-fastapi = {extras = ["all"], version = "^0.55.1"}
-loguru = "^0.5.0"
+fastapi = {extras = ["all"], version = "^0.58"}
+loguru = "^0.5"
 importlib_metadata = {version = "^1.6.0", python = "<3.8"}
 passlib = {extras = ["bcrypt"], version = "^1.7.2"}
 pendulum = "^2.1.0"
@@ -22,10 +22,11 @@ pyjwt = "^1.7.1"
 python-dotenv = "^0.13.0"
 tortoise-orm = {extras = ["accel"], version = "^0.16.13"}
 typer = {extras = ["all"], version = "^0.2.1"}
+dropbox = "^10.2.0"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
-codecov = "^2.1.4"
+codecov = "^2.1"
 coverage = {extras = ["toml"], version = "^5.1"}
 darglint = "^1.4.0"
 flake8 = "^3.8.2"
@@ -37,13 +38,13 @@ flake8-docstrings = "^1.5.0"
 flake8-import-order = "^0.18.1"
 isort = {extras = ["pyproject"], version = "^4.3.21"}
 mkdocs = "^1.1.2"
-mkdocs-material = "^5.2.3"
+mkdocs-material = "^5.3"
 mkdocstrings = "^0.11.3"
 mkdocs-minify-plugin = "^0.3.0"
 mkdocs-git-revision-date-localized-plugin = "^0.5.2"
 mypy = "^0.770"
 pytest = "^5.4.2"
-pytest-cov = "^2.9.0"
+pytest-cov = "^2.10"
 pytype = {version = "^2020.5.13", python = "3.7"}
 safety = "^1.9.0"
 typeguard = "^2.9.1"
