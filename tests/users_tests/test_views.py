@@ -65,3 +65,49 @@ def test_login_incorrect(
         "/users/login/", data="username=mohamed&password=1234567899mnm", headers=headers
     )
     assert response.status_code == 401
+
+
+def test_sign_up_as_teacher(client: TestClient) -> None:
+    """It exits with a status code of 201."""
+    headers = {"Content-type": "application/json"}
+    data = {
+        "username": "teached",
+        "password": "1234567899mnm",
+        "email": "teached@teached.com",
+        "become": "Teacher",
+    }
+    response = client.post("/users/", json=data, headers=headers)
+
+    assert response.json() == {"detail": "user has been created"}
+    assert response.status_code == 201
+
+
+def test_sign_up_as_student(client: TestClient) -> None:
+    """It exits with a status code of 201."""
+    data = {
+        "username": "teached",
+        "password": "1234567899mnm",
+        "email": "teached@teached.com",
+        "become": "Student",
+        "full_name": "teached",
+        "phone_number": "123456789",
+    }
+    response = client.post("/users/", json=data)
+
+    assert response.json() == {"detail": "user has been created"}
+    assert response.status_code == 201
+
+
+def test_sign_up_fail(client: TestClient) -> None:
+    """It exits with a status code of 422."""
+    data = {
+        "username": "teached",
+        "password": "123456789",
+        "email": "teached@teached.com",
+        "become": "Student",
+        "full_name": "teached",
+        "phone_number": "123456789dd",
+    }
+    response = client.post("/users/", json=data)
+
+    assert response.status_code == 422

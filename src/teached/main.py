@@ -34,4 +34,4 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
-app.include_router(users_views.router, prefix="/users")
+app.include_router(users_views.router, prefix="/users", tags=["users"])

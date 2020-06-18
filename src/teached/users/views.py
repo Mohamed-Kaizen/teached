@@ -1,25 +1,24 @@
 """Views for users app."""
 from typing import Dict, Union
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
 from teached.settings import settings
 
-from . import services, utils  # noqa: I202
+from . import schema, utils  # noqa: I202
+from .services import authenticate, create_user, update_last_login
 
 router = APIRouter()
 
 
 @router.post("/login/")
 async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    background_tasks: BackgroundTasks, form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> Dict[str, Union[bytes, str]]:
     """Login End point."""
-    user = await services.authenticate(
-        username=form_data.username, password=form_data.password
-    )
+    user = await authenticate(username=form_data.username, password=form_data.password)
 
     if not user:
         raise HTTPException(
@@ -33,6 +32,13 @@ async def login(
         expires_in_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
     )
 
-    await services.update_last_login(user=user)
+    background_tasks.add_task(update_last_login, user=user)
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/", status_code=status.HTTP_201_CREATED)
+async def sign_up(user_input: schema.User) -> Dict[str, str]:
+    """Sign up new users."""
+    await create_user(data=user_input.dict())
+    return {"detail": "user has been created"}

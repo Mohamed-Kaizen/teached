@@ -50,6 +50,18 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
+    # Don't decrease this number unless you have a good reason not to.
+    # Please read
+    # https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+    # #maximum-password-lengths
+    MINIMUM_PASSWORD_LENGTH: int = 8
+
+    # Don't increase this number unless you have a good reason not to.
+    # Please read
+    # https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+    # #maximum-password-lengths
+    MAXIMUM_PASSWORD_LENGTH: int = 16
+
     class Config:
         """Base Config for Settings."""
 
