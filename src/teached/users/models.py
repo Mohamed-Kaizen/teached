@@ -1,5 +1,6 @@
 """Models for users app."""
-from tortoise import fields, models
+from tortoise import Tortoise, fields, models
+from tortoise.contrib.pydantic import pydantic_model_creator
 
 from .base import AbstractUser
 
@@ -22,6 +23,8 @@ class User(AbstractUser):
 class Teacher(models.Model):
     """The teacher model."""
 
+    id = fields.UUIDField(pk=True)
+
     user = models.OneToOneFieldInstance(
         "models.User", related_name="teachers", on_delete=fields.CASCADE
     )
@@ -35,6 +38,8 @@ class Teacher(models.Model):
 class Student(models.Model):
     """The student model."""
 
+    id = fields.UUIDField(pk=True)
+
     user = models.OneToOneFieldInstance(
         "models.User", related_name="students", on_delete=fields.CASCADE
     )
@@ -43,3 +48,15 @@ class Student(models.Model):
         """Meta data."""
 
         table = "student"
+
+
+Tortoise.init_models(["teached.users.models"], "models")
+UserPydantic = pydantic_model_creator(
+    User, name="User", exclude=("password", "id", "is_superuser")
+)
+UserPersonalInfoPydantic = pydantic_model_creator(
+    User,
+    name="UserIn",
+    include=("full_name", "phone_number", "bio"),
+    exclude_readonly=True,
+)
