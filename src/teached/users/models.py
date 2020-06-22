@@ -25,7 +25,7 @@ class Teacher(models.Model):
 
     id = fields.UUIDField(pk=True)
 
-    user = models.OneToOneFieldInstance(
+    user = fields.OneToOneField(
         "models.User", related_name="teachers", on_delete=fields.CASCADE
     )
 
@@ -40,7 +40,7 @@ class Student(models.Model):
 
     id = fields.UUIDField(pk=True)
 
-    user = models.OneToOneFieldInstance(
+    user = fields.OneToOneField(
         "models.User", related_name="students", on_delete=fields.CASCADE
     )
 

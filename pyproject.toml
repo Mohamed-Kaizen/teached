@@ -51,6 +51,7 @@ typeguard = "^2.9.1"
 xdoctest = "^0.12.0"
 asynctest = "^0.13.0"
 pytest-dotenv = "^0.5"
+pyupgrade = "^2.6.1"
 
 [tool.poetry.scripts]
 teached = "teached.manage:app"
