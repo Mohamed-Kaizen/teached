@@ -11,7 +11,6 @@ def test_help_succeeds() -> None:
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0
     assert "version" in result.output
-    assert "serve" in result.output
     assert "create-superuser" in result.output
 
 

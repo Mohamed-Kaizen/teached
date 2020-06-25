@@ -38,16 +38,6 @@ def version() -> None:
     typer.secho(f"{project_name} Version: {__version__}", fg=typer.colors.BRIGHT_GREEN)
 
 
-@app.command()
-def serve() -> None:
-    """Serve the app."""
-    typer.echo("Running the server")
-
-    uvicorn.run(
-        "teached.main:app", host="127.0.0.1", port=8000, reload=True, log_level="info",
-    )
-
-
 @app.command("create-superuser")
 def create_superuser(
     username: str = typer.Option(..., prompt=True),
