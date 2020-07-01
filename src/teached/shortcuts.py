@@ -12,6 +12,14 @@ def get_user_model() -> Any:
     return getattr(importlib.import_module(module_name), class_name)
 
 
+def get_model(*, path: str) -> Any:
+    """Getting any model."""
+
+    module_name, class_name = path.rsplit(".", 1)
+
+    return getattr(importlib.import_module(module_name), class_name)
+
+
 def upload_to_dropbox(
     *, oauth2_token: str, file: bytes, filename: str, file_path: str
 ) -> None:
