@@ -27,7 +27,7 @@ Authorization: Bearer {{teacher_access_token}}
   "categories": ["Development", "Python", "programing"],
   "languages": ["English"],
   "requirements": [],
-  "level": "Beginner Level",
+  "level": "beginner",
   "price": 0,
   "discount": 0
 }

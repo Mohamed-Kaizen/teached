@@ -35,13 +35,13 @@ class Category(str, Enum):
 class Level(str, Enum):
     """Level enum class."""
 
-    beginner = "Beginner Level"
+    Beginner = "beginner"
 
-    intermediate = "Intermediate Level"
+    Intermediate = "intermediate"
 
-    expert = "Expert Level"
+    Expert = "expert"
 
-    all = "All Levels"
+    All = "all"
 
 
 class Rate(int, Enum):

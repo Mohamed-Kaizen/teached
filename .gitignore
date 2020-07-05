@@ -301,5 +301,5 @@ $RECYCLE.BIN/
 ### custom ###
 db.sqlite3
 db.sqlite3-*
-
+.idea
 # End of https://www.gitignore.io/api/venv,osx,linux,macos,dotenv,python,windows,pycharm+all,visualstudiocode
