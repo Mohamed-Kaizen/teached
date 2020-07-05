@@ -38,7 +38,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite://./db.sqlite3"
 
-    DB_MODELS: List[str] = ["teached.users.models"]
+    DB_MODELS: List[str] = ["teached.users.models", "teached.courses.models"]
 
     PASSWORD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
 from . import __version__
+from .courses import views as courses_views
 from .settings import settings
 from .users import views as users_views
 from .users.middleware import AuthJWTMiddleware
@@ -35,3 +36,4 @@ register_tortoise(
 )
 
 app.include_router(users_views.router, prefix="/users", tags=["users"])
+app.include_router(courses_views.router, prefix="/courses", tags=["courses"])
