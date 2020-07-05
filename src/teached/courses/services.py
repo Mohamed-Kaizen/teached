@@ -1,5 +1,5 @@
 """Collection of services."""
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from fastapi import HTTPException, status
 from tortoise import QuerySet
@@ -7,6 +7,7 @@ from tortoise import QuerySet
 from teached.users.models import Teacher
 
 from .models import (  # noqa I202
+    BookMark,
     Category,
     Course,
     CourseDetailPydantic,
@@ -193,3 +194,47 @@ async def enroll_to_published_course(*, slug: str, student: Any) -> Dict[str, st
     return {
         "detail": f"Yea! you have enrolled to {course}, go and enjoy the course now :)"
     }
+
+
+async def bookmark_a_published_course(*, slug: str, student: Any) -> Dict[str, str]:
+    """Bookmark a published course.
+
+    Args:
+        slug: The slug of course.
+        student: Student instances.
+
+    Returns:
+        Dict.
+
+    Raises:
+        HTTPException: If use has already bookmarked.
+    """
+    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+
+    if await course.book_marks.filter(course=course, student=student):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"You already bookmark {course}",
+        )
+
+    await BookMark.create(course=course, student=student)
+
+    return {"detail": f"{course} has been bookmarked :)"}
+
+
+async def get_bookmarks(*, student: Any) -> List[Dict]:
+    """Get list of bookmark.
+
+    Args:
+        student: Student instances.
+
+    Returns:
+        List of bookmarked course.
+    """
+    course_list = []
+    for bookmark in await BookMark.filter(student=student):
+        course = await bookmark.course
+        course_list.append(
+            {"title": f"{course.title}", "cover": {course.cover}, "slug": course.slug}
+        )
+    return course_list

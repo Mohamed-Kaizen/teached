@@ -49,3 +49,14 @@ Authorization: Bearer {{student_access_token}}
 POST http://127.0.0.1:8000/courses/{{course_slug}}/
 Content-Type: application/json
 Authorization: Bearer {{student_access_token}}
+
+### course bookmark
+POST http://127.0.0.1:8000/courses/{{course_slug}}/bookmark/
+Content-Type: application/json
+Authorization: Bearer {{student_access_token}}
+
+
+### bookmark
+GET http://127.0.0.1:8000/courses/bookmarks/
+Content-Type: application/json
+Authorization: Bearer {{student_access_token}}

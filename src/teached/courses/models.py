@@ -221,9 +221,7 @@ class BookMark(models.Model):
     id = fields.UUIDField(pk=True)
 
     course = fields.ForeignKeyField(
-        model_name="models.Section",
-        related_name="book_marks",
-        on_delete=fields.CASCADE,
+        model_name="models.Course", related_name="book_marks", on_delete=fields.CASCADE,
     )
 
     student = fields.ForeignKeyField(
@@ -387,6 +385,7 @@ CourseListPydantic = pydantic_model_creator(
         "teacher.id",
         "announcements",
         "sections",
+        "book_marks",
         "teacher.announcements",
         "teacher.user.id",
         "teacher.user.password",

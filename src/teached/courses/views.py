@@ -8,8 +8,10 @@ from teached.users import depends, models
 from . import schema  # noqa I202
 from .models import CourseListPydantic
 from .services import (
+    bookmark_a_published_course,
     create_course,
     enroll_to_published_course,
+    get_bookmarks,
     get_published_course,
     get_published_courses,
 )
@@ -49,6 +51,22 @@ async def course_create(
     )
 
     return {"slug": slug}
+
+
+@router.get("/bookmarks/")
+async def bookmark_list(
+    auth_user: models.Student = Depends(depends.is_student),
+) -> List[Dict]:
+    """List of Bookmark."""
+    return await get_bookmarks(student=auth_user)
+
+
+@router.post("/{slug}/bookmark/", status_code=status.HTTP_201_CREATED)
+async def course_bookmark(
+    slug: str, auth_user: models.Student = Depends(depends.is_student)
+) -> Dict[str, str]:
+    """Bookmark a course."""
+    return await bookmark_a_published_course(slug=slug, student=auth_user)
 
 
 @router.get("/{slug}/", response_model=schema.CourseDetail)
