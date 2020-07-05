@@ -40,7 +40,12 @@ Content-Type: application/json
 
 
 ### course detail
-GET http://127.0.0.1:8000/courses/{{course_slug}}
+GET http://127.0.0.1:8000/courses/{{course_slug}}/
 Content-Type: application/json
 Authorization: Bearer {{student_access_token}}
 
+
+### course enroll
+POST http://127.0.0.1:8000/courses/{{course_slug}}/
+Content-Type: application/json
+Authorization: Bearer {{student_access_token}}
