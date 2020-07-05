@@ -1,5 +1,6 @@
 """Collection of pydantic schema."""
-from typing import List, Optional
+from datetime import datetime
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -24,3 +25,47 @@ class Course(BaseModel):
     price: float
 
     discount: Optional[float] = None
+
+
+class CourseDetail(BaseModel):
+    """Schema for course detail data."""
+
+    title: str
+
+    overview: str
+
+    level: str
+
+    cover: Optional[str]
+
+    video: Optional[str]
+
+    price: float
+
+    discount: float
+
+    enrollments: int
+
+    reviews: int
+
+    rate: int
+
+    created_at: datetime
+
+    updated_at: datetime
+
+    is_authenticated: bool
+
+    has_enroll: bool
+
+    is_owner: bool
+
+    teacher: Dict
+
+    categories: List[Dict]
+
+    languages: List[Dict]
+
+    requirements: List[Dict]
+
+    sections: List[Dict]

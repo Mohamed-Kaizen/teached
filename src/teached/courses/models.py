@@ -187,7 +187,7 @@ class Review(models.Model):
     id = fields.UUIDField(pk=True)
 
     course = fields.ForeignKeyField(
-        model_name="models.Section", on_delete=fields.CASCADE, related_name="reviews"
+        model_name="models.Course", on_delete=fields.CASCADE, related_name="reviews"
     )
 
     rate = fields.CharEnumField(enum_type=Rate, max_length=10)
@@ -252,7 +252,7 @@ class Enrollment(models.Model):
     id = fields.UUIDField(pk=True)
 
     course = fields.ForeignKeyField(
-        model_name="models.Section",
+        model_name="models.Course",
         related_name="enrollments",
         on_delete=fields.CASCADE,
     )
@@ -376,6 +376,11 @@ CourseListPydantic = pydantic_model_creator(
         "overview",
         "video",
         "is_drift",
+        "is_active",
+        "enrollments",
+        "requirements",
+        "reviews",
+        "is_active",
         "languages.id",
         "requirements.id",
         "categories.id",
@@ -386,6 +391,33 @@ CourseListPydantic = pydantic_model_creator(
         "teacher.user.id",
         "teacher.user.password",
         "teacher.user.email",
+        "teacher.user.is_superuser",
+        "teacher.user.is_active",
+        "teacher.user.last_login",
+        "teacher.user.joined_at",
+        "teacher.user.full_name",
+        "teacher.user.phone_number",
+        "teacher.user.bio",
+        "teacher.user.students",
+    ),
+)
+
+CourseDetailPydantic = pydantic_model_creator(
+    Course,
+    name="CourseDetail",
+    exclude=(
+        "id",
+        "slug",
+        "is_drift",
+        "is_active",
+        "announcements",
+        "enrollments",
+        "reviews",
+        "teacher.id",
+        "teacher.announcements",
+        "teacher.user.id",
+        "teacher.user.email",
+        "teacher.user.password",
         "teacher.user.is_superuser",
         "teacher.user.is_active",
         "teacher.user.last_login",

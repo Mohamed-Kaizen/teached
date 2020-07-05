@@ -1,13 +1,13 @@
 """Views for courses app."""
 from typing import Dict, List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Request, status
 
 from teached.users import depends, models
 
 from . import schema  # noqa I202
 from .models import CourseListPydantic
-from .services import create_course, get_published_courses
+from .services import create_course, get_published_course, get_published_courses
 
 router = APIRouter()
 
@@ -46,13 +46,7 @@ async def course_create(
     return {"slug": slug}
 
 
-#
-# @router.get("/{slug}/")
-# async def course_detail(slug: str) -> Dict[str, str]:
-#     """Course detail."""
-#
-#     slug = await create_course(
-#         data=user_input.dict(exclude_unset=True), teacher=auth_user
-#     )
-#
-#     return {"slug": slug}
+@router.get("/{slug}/", response_model=schema.CourseDetail)
+async def course_detail(request: Request, slug: str) -> schema.CourseDetail:
+    """Course detail."""
+    return await get_published_course(slug=slug, user=request.state.user)

@@ -1,11 +1,18 @@
 """Collection of services."""
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from tortoise import QuerySet
 
 from teached.users.models import Teacher
 
-from .models import Category, Course, Language, Requirement  # noqa I202
+from .models import (  # noqa I202
+    Category,
+    Course,
+    CourseDetailPydantic,
+    Language,
+    Requirement,
+)
+from .schema import CourseDetail
 from .utils import unique_slug
 
 
@@ -70,6 +77,7 @@ async def get_published_courses(
     Returns:
         Query set of course.
     """
+    # TODO: change is_drift to False.
     courses = Course.filter(is_drift=True, is_active=True)
 
     if search:
@@ -91,3 +99,59 @@ async def get_published_courses(
         courses = courses.filter(discount=discount)
 
     return courses
+
+
+async def get_published_course(*, slug: str, user: Any) -> CourseDetail:
+    """Return a published courses.
+
+    Args:
+        slug: The slug of course.
+        user: Current authenticated user.
+
+    Returns:
+        Query set of course.
+    """
+    # TODO: change is_drift to False.
+    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    pydatic_data = await CourseDetailPydantic.from_tortoise_orm(course)
+    data = pydatic_data.dict()
+    data.update(
+        {
+            "is_authenticated": user is not None,
+            "has_enroll": False,
+            "is_owner": False,
+            "enrollments": await course.enrollments.all().count(),
+            "reviews": await course.reviews.all().count(),
+        }
+    )
+
+    if user:
+        user_student = await user.students.first()
+        user_teacher = await user.teachers.first()
+
+        if user_student:
+            data.update(
+                {
+                    "has_enroll": await course.enrollments.filter(
+                        student=user_student
+                    ).first()
+                    is not None
+                }
+            )
+
+        author = await course.teacher
+
+        if user_teacher == author:
+            data.update({"is_owner": True})
+
+    # TODO: change it to computed method.
+    reviews = course.reviews.all()
+    try:
+        rate = sum(review.rate for review in await reviews) / await reviews.count()
+
+    except ZeroDivisionError:
+        rate = 0
+
+    data.update({"rate": rate})
+
+    return CourseDetail(**data)
