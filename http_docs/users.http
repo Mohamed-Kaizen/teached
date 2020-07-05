@@ -1,0 +1,25 @@
+### create teacher
+POST http://127.0.0.1:8000/users/
+Content-Type: application/json
+
+{
+  "username": "teached",
+  "password": "123456789teached",
+  "email": "teached@teached.com",
+  "full_name": "teached",
+  "phone_number": "1234567899",
+  "become": "Teacher"
+}
+
+### create student
+POST http://127.0.0.1:8000/users/
+Content-Type: application/json
+
+{
+  "username": "teached1",
+  "password": "12345678teached1",
+  "email": "teached1@teached1.com",
+  "full_name": "teached1",
+  "phone_number": "1234567899",
+  "become": "Student"
+}

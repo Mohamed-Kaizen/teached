@@ -1,0 +1,40 @@
+### Login as teacher
+POST http://127.0.0.1:8000/users/login/
+Content-Type: application/x-www-form-urlencoded
+
+username=teached&password=123456789teached
+
+
+> {% client.global.set("teacher_access_token", response.body.access_token); %}
+
+### Login as student
+POST http://127.0.0.1:8000/users/login/
+Content-Type: application/x-www-form-urlencoded
+
+username=teached1&password=12345678teached1
+
+
+> {% client.global.set("student_access_token", response.body.access_token); %}
+
+### create course
+POST http://127.0.0.1:8000/courses/
+Content-Type: application/json
+Authorization: Bearer {{teacher_access_token}}
+
+{
+  "title": "Python 101",
+  "overview": "Python tutorial",
+  "categories": ["Development", "Python", "programing"],
+  "languages": ["English"],
+  "requirements": [],
+  "level": "Beginner Level",
+  "price": 0,
+  "discount": 0
+}
+
+> {% client.global.set("course_slug", response.body.slug); %}
+
+### course list
+GET http://127.0.0.1:8000/courses/
+Content-Type: application/json
+
