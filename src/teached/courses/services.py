@@ -1,6 +1,7 @@
 """Collection of services."""
 from typing import Any, Dict, Optional
 
+from fastapi import HTTPException, status
 from tortoise import QuerySet
 
 from teached.users.models import Teacher
@@ -9,6 +10,7 @@ from .models import (  # noqa I202
     Category,
     Course,
     CourseDetailPydantic,
+    Enrollment,
     Language,
     Requirement,
 )
@@ -155,3 +157,39 @@ async def get_published_course(*, slug: str, user: Any) -> CourseDetail:
     data.update({"rate": rate})
 
     return CourseDetail(**data)
+
+
+async def enroll_to_published_course(*, slug: str, student: Any) -> Dict[str, str]:
+    """Enroll new student to a published course.
+
+    Args:
+        slug: The slug of course.
+        student: Student instances.
+
+    Returns:
+        Dict.
+
+    Raises:
+        HTTPException: If use has already enrolled.
+    """
+    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+
+    if await course.enrollments.filter(student=student):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"You already enrolled to {course}",
+        )
+
+    if course.price > 0:
+        print("Payment")
+        # TODO: add the stripe payment
+        # stripe()
+
+        # TODO: add payment process to the payment model
+        # Payment()
+
+    await Enrollment.create(course=course, student=student)
+
+    return {
+        "detail": f"Yea! you have enrolled to {course}, go and enjoy the course now :)"
+    }

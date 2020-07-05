@@ -7,7 +7,12 @@ from teached.users import depends, models
 
 from . import schema  # noqa I202
 from .models import CourseListPydantic
-from .services import create_course, get_published_course, get_published_courses
+from .services import (
+    create_course,
+    enroll_to_published_course,
+    get_published_course,
+    get_published_courses,
+)
 
 router = APIRouter()
 
@@ -50,3 +55,11 @@ async def course_create(
 async def course_detail(request: Request, slug: str) -> schema.CourseDetail:
     """Course detail."""
     return await get_published_course(slug=slug, user=request.state.user)
+
+
+@router.post("/{slug}/", status_code=status.HTTP_201_CREATED)
+async def course_enroll(
+    slug: str, auth_user: models.Student = Depends(depends.is_student)
+) -> Dict[str, str]:
+    """Course enroll."""
+    return await enroll_to_published_course(slug=slug, student=auth_user)
