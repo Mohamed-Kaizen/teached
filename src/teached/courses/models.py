@@ -4,7 +4,7 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 from teached.shortcuts import get_model
 
-from .enum import Level, Rate  # noqa I202
+from .enum import Level  # noqa I202
 
 Teacher = get_model(path="teached.users.models.Teacher")
 Student = get_model(path="teached.users.models.Student")
@@ -190,7 +190,7 @@ class Review(models.Model):
         model_name="models.Course", on_delete=fields.CASCADE, related_name="reviews"
     )
 
-    rate = fields.CharEnumField(enum_type=Rate, max_length=10)
+    rate = fields.IntField()
 
     review = fields.TextField()
 
@@ -212,7 +212,7 @@ class Review(models.Model):
 
     def __str__(self: "Review") -> str:
         """The string representative for course class."""
-        return f"{self.rate} for {self.course} by {self.student}"
+        return f"{self.course} by {self.student}"
 
 
 class BookMark(models.Model):
