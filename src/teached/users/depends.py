@@ -74,3 +74,23 @@ async def is_teacher(current_user: User = Depends(is_active_user)) -> Teacher:
             status_code=status.HTTP_400_BAD_REQUEST, detail="You are not a teacher"
         )
     return teacher
+
+
+async def is_student(current_user: User = Depends(is_active_user)) -> Teacher:
+    """Check if the user is student.
+
+    Args:
+        current_user: depends function.
+
+    Returns:
+        user model
+
+    Raises:
+        HTTPException: If user is not teacher return 400 status.
+    """
+    teacher = await current_user.students.first()
+    if not teacher:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="You are not a student"
+        )
+    return teacher
