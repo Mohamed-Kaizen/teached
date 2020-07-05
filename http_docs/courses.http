@@ -50,7 +50,7 @@ POST http://127.0.0.1:8000/courses/{{course_slug}}/
 Content-Type: application/json
 Authorization: Bearer {{student_access_token}}
 
-### course bookmark
+### bookmark a course
 POST http://127.0.0.1:8000/courses/{{course_slug}}/bookmark/
 Content-Type: application/json
 Authorization: Bearer {{student_access_token}}
@@ -60,3 +60,16 @@ Authorization: Bearer {{student_access_token}}
 GET http://127.0.0.1:8000/courses/bookmarks/
 Content-Type: application/json
 Authorization: Bearer {{student_access_token}}
+
+
+### course a review
+POST http://127.0.0.1:8000/courses/{{course_slug}}/review/
+Content-Type: application/json
+Authorization: Bearer {{student_access_token}}
+
+{"review":  "Good course", "rate": 5}
+
+
+### course a review
+GET http://127.0.0.1:8000/courses/{{course_slug}}/review/
+Content-Type: application/json

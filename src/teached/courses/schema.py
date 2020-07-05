@@ -69,3 +69,11 @@ class CourseDetail(BaseModel):
     requirements: List[Dict]
 
     sections: List[Dict]
+
+
+class CreateReview(BaseModel):
+    """Schema for review creation data."""
+
+    review: str
+
+    rate: int = Field(..., ge=1, le=5)

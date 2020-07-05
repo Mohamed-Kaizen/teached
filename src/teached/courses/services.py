@@ -14,6 +14,7 @@ from .models import (  # noqa I202
     Enrollment,
     Language,
     Requirement,
+    Review,
 )
 from .schema import CourseDetail
 from .utils import unique_slug
@@ -238,3 +239,64 @@ async def get_bookmarks(*, student: Any) -> List[Dict]:
             {"title": f"{course.title}", "cover": {course.cover}, "slug": course.slug}
         )
     return course_list
+
+
+async def create_review_for_published_course(
+    *, slug: str, data: Dict, student: Any
+) -> Dict[str, str]:
+    """Create review for a published course.
+
+    Args:
+        slug: The slug of course.
+        data: Dict of data for review creation.
+        student: Student instances.
+
+    Returns:
+        Dict.
+
+    Raises:
+        HTTPException: If use has has not enroll for the course or
+                       student review the course already.
+    """
+    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+
+    if not await course.enrollments.filter(student=student):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You need to enroll to the course first",
+        )
+
+    if await course.reviews.filter(student=student):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You already review this course",
+        )
+    await Review.create(**data, course=course, student=student)
+
+    return {"detail": "review has been created."}
+
+
+async def reviews_course_list(*, slug: str) -> List[Dict]:
+    """Get all  reviews.
+
+    Args:
+        slug: The slug of course.
+
+    Returns:
+        List of reviews.
+    """
+    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    review_list = []
+
+    for review in await course.reviews.all():
+        student = await review.student
+        user = await student.user
+        review_list.append(
+            {
+                "review": f"{review.review}",
+                "rate": {review.rate},
+                "user": {"username": user.username},
+            }
+        )
+
+    return review_list

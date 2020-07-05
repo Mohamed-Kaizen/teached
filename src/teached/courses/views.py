@@ -10,10 +10,12 @@ from .models import CourseListPydantic
 from .services import (
     bookmark_a_published_course,
     create_course,
+    create_review_for_published_course,
     enroll_to_published_course,
     get_bookmarks,
     get_published_course,
     get_published_courses,
+    reviews_course_list,
 )
 
 router = APIRouter()
@@ -67,6 +69,24 @@ async def course_bookmark(
 ) -> Dict[str, str]:
     """Bookmark a course."""
     return await bookmark_a_published_course(slug=slug, student=auth_user)
+
+
+@router.post("/{slug}/review/", status_code=status.HTTP_201_CREATED)
+async def course_review(
+    user_input: schema.CreateReview,
+    slug: str,
+    auth_user: models.Student = Depends(depends.is_student),
+) -> Dict[str, str]:
+    """Create review for a course."""
+    return await create_review_for_published_course(
+        slug=slug, student=auth_user, data=user_input.dict()
+    )
+
+
+@router.get("/{slug}/review/")
+async def get_course_reviews(slug: str) -> List[Dict]:
+    """Get all course reviews."""
+    return await reviews_course_list(slug=slug)
 
 
 @router.get("/{slug}/", response_model=schema.CourseDetail)
