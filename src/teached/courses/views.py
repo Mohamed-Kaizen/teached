@@ -1,15 +1,17 @@
 """Views for courses app."""
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from fastapi import APIRouter, Depends, Request, status
 
 from teached.users import depends, models
 
 from . import schema  # noqa I202
+from .depends import Course, Teacher, is_owner
 from .models import CourseListPydantic
 from .services import (
     bookmark_a_published_course,
     create_course,
+    create_course_section,
     create_review_for_published_course,
     enroll_to_published_course,
     get_bookmarks,
@@ -87,6 +89,16 @@ async def course_review(
 async def get_course_reviews(slug: str) -> List[Dict]:
     """Get all course reviews."""
     return await reviews_course_list(slug=slug)
+
+
+@router.post("/{slug}/manage/section/")
+async def section_create(
+    user_input: schema.CreateSection,
+    auth_user: Tuple[Teacher, Course] = Depends(is_owner),
+) -> Dict:
+    """Create new section for a course."""
+    _, course = auth_user
+    return await create_course_section(course=course, data=user_input.dict())
 
 
 @router.get("/{slug}/", response_model=schema.CourseDetail)

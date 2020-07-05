@@ -77,3 +77,13 @@ class CreateReview(BaseModel):
     review: str
 
     rate: int = Field(..., ge=1, le=5)
+
+
+class CreateSection(BaseModel):
+    """Schema for section creation data."""
+
+    title: str = Field(..., max_length=100, min_length=1)
+
+    objective: str
+
+    order: int

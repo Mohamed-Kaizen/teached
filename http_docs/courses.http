@@ -73,3 +73,14 @@ Authorization: Bearer {{student_access_token}}
 ### course a review
 GET http://127.0.0.1:8000/courses/{{course_slug}}/review/
 Content-Type: application/json
+
+### create course section
+POST http://127.0.0.1:8000/courses/{{course_slug}}/manage/section/
+Content-Type: application/json
+Authorization: Bearer {{teacher_access_token}}
+
+{
+  "title": "Python basic structure",
+  "objective":  "This section you will learn basic stuff about python",
+  "order": 1
+}

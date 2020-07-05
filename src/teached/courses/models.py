@@ -132,7 +132,7 @@ class Section(models.Model):
 
     order = models.IntField()
 
-    slug = fields.CharField(unique=True, max_length=200)
+    slug = fields.CharField(unique=True, max_length=200, null=True)
 
     created_at = fields.DatetimeField(auto_now_add=True)
 

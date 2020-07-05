@@ -15,6 +15,7 @@ from .models import (  # noqa I202
     Language,
     Requirement,
     Review,
+    Section,
 )
 from .schema import CourseDetail
 from .utils import unique_slug
@@ -300,3 +301,35 @@ async def reviews_course_list(*, slug: str) -> List[Dict]:
         )
 
     return review_list
+
+
+async def create_course_section(*, data: Dict, course: Course,) -> Dict:
+    """Create course section.
+
+    Args:
+        data: Dict of data for section creation.
+        course: Course instance.
+
+    Returns:
+        The create section info.
+
+    Raises:
+        HTTPException: if the same section was created before.
+    """
+    section, created = await Section.get_or_create(**data, course=course)
+
+    if not created:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This section was been created before",
+        )
+
+    section.slug = unique_slug(title=section.title)
+    await section.save()
+
+    return {
+        "title": section.title,
+        "objective": section.objective,
+        "order": section.order,
+        "slug": section.slug,
+    }
