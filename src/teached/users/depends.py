@@ -88,9 +88,9 @@ async def is_student(current_user: User = Depends(is_active_user)) -> Teacher:
     Raises:
         HTTPException: If user is not teacher return 400 status.
     """
-    teacher = await current_user.students.first()
-    if not teacher:
+    student = await current_user.students.first()
+    if not student:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="You are not a student"
         )
-    return teacher
+    return student
