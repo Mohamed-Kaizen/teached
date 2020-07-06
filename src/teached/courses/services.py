@@ -85,8 +85,7 @@ async def get_published_courses(
     Returns:
         Query set of course.
     """
-    # TODO: change is_drift to False.
-    courses = Course.filter(is_drift=True, is_active=True)
+    courses = Course.filter(is_drift=False, is_active=True)
 
     if search:
         courses = courses.filter(title=search)
@@ -119,8 +118,7 @@ async def get_published_course(*, slug: str, user: Any) -> CourseDetail:
     Returns:
         Query set of course.
     """
-    # TODO: change is_drift to False.
-    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    course = await Course.get(is_drift=False, is_active=True, slug=slug)
     pydatic_data = await CourseDetailPydantic.from_tortoise_orm(course)
     data = pydatic_data.dict()
     data.update(
@@ -178,7 +176,7 @@ async def enroll_to_published_course(*, slug: str, student: Any) -> Dict[str, st
     Raises:
         HTTPException: If use has already enrolled.
     """
-    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    course = await Course.get(is_drift=False, is_active=True, slug=slug)
 
     if await course.enrollments.filter(student=student):
         raise HTTPException(
@@ -214,7 +212,7 @@ async def bookmark_a_published_course(*, slug: str, student: Any) -> Dict[str, s
     Raises:
         HTTPException: If use has already bookmarked.
     """
-    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    course = await Course.get(is_drift=False, is_active=True, slug=slug)
 
     if await course.book_marks.filter(course=course, student=student):
         raise HTTPException(
@@ -262,7 +260,7 @@ async def create_review_for_published_course(
         HTTPException: If use has has not enroll for the course or
                        student review the course already.
     """
-    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    course = await Course.get(is_drift=False, is_active=True, slug=slug)
 
     if not await course.enrollments.filter(student=student):
         raise HTTPException(
@@ -289,7 +287,7 @@ async def reviews_course_list(*, slug: str) -> List[Dict]:
     Returns:
         List of reviews.
     """
-    course = await Course.get(is_drift=True, is_active=True, slug=slug)
+    course = await Course.get(is_drift=False, is_active=True, slug=slug)
     review_list = []
 
     for review in await course.reviews.all():
