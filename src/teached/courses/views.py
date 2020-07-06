@@ -13,6 +13,7 @@ from .services import (
     create_course,
     create_course_section,
     create_review_for_published_course,
+    create_section_assignment,
     create_section_lecture,
     enroll_to_published_course,
     get_bookmarks,
@@ -108,8 +109,20 @@ async def lecture_create(
     user_input: schema.CreateLecture,
     auth_user: Tuple[Teacher, Course] = Depends(is_owner),
 ) -> Dict:
-    """Create new lecture for a course."""
+    """Create new lecture for a section."""
     return await create_section_lecture(
+        section_slug=section_slug, data=user_input.dict(exclude_unset=True)
+    )
+
+
+@router.post("/{slug}/manage/section/{section_slug}/assignment/")
+async def assignment_create(
+    section_slug: str,
+    user_input: schema.CreateAssignment,
+    auth_user: Tuple[Teacher, Course] = Depends(is_owner),
+) -> Dict:
+    """Create new assignment for a section."""
+    return await create_section_assignment(
         section_slug=section_slug, data=user_input.dict(exclude_unset=True)
     )
 

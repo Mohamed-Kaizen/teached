@@ -97,3 +97,11 @@ class CreateLecture(BaseModel):
     text: Optional[str]
 
     order: int
+
+
+class CreateAssignment(BaseModel):
+    """Schema for assignment creation data."""
+
+    title: str = Field(..., max_length=100, min_length=1)
+
+    description: str

@@ -351,6 +351,8 @@ class Assignment(models.Model):
         on_delete=fields.CASCADE,
     )
 
+    slug = fields.CharField(unique=True, max_length=200, null=True)
+
     created_at = fields.DatetimeField(auto_now_add=True)
 
     updated_at = fields.DatetimeField(auto_now=True)

@@ -7,6 +7,7 @@ from tortoise import QuerySet
 from teached.users.models import Teacher
 
 from .models import (  # noqa I202
+    Assignment,
     BookMark,
     Category,
     Course,
@@ -367,5 +368,39 @@ async def create_section_lecture(*, data: Dict, section_slug: str) -> Dict:
         "text": lecture.text,
         "video": lecture.video,
         "order": section.order,
+        "slug": section.slug,
+    }
+
+
+async def create_section_assignment(*, data: Dict, section_slug: str) -> Dict:
+    """Create section assignment.
+
+    Args:
+        data: Dict of data for section creation.
+        section_slug: The slug of the section.
+
+    Returns:
+        The created assignment info.
+
+    Raises:
+        HTTPException: if the same assignment was created before.
+    """
+    section = await Section.get(slug=section_slug)
+
+    assignment, created = await Assignment.get_or_create(**data, section=section)
+
+    if not created:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This assignment was been created before",
+        )
+
+    assignment.slug = unique_slug(title=assignment.title)
+    await assignment.save()
+
+    return {
+        "title": assignment.title,
+        "text": assignment.description,
+        "file": assignment.file,
         "slug": section.slug,
     }

@@ -100,3 +100,15 @@ Authorization: Bearer {{teacher_access_token}}
 }
 
 > {% client.global.set("lecture_slug", response.body.slug); %}
+
+### create section assignment
+POST http://127.0.0.1:8000/courses/{{course_slug}}/manage/section/{{section_slug}}/assignment/
+Content-Type: application/json
+Authorization: Bearer {{teacher_access_token}}
+
+{
+  "title": "Python syntax assignment",
+  "description":  "basic Python syntax assignment"
+}
+
+> {% client.global.set("assignment_slug", response.body.slug); %}
