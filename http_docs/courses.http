@@ -84,3 +84,19 @@ Authorization: Bearer {{teacher_access_token}}
   "objective":  "This section you will learn basic stuff about python",
   "order": 1
 }
+
+> {% client.global.set("section_slug", response.body.slug); %}
+
+
+### create section lecture
+POST http://127.0.0.1:8000/courses/{{course_slug}}/manage/section/{{section_slug}}/lecture/
+Content-Type: application/json
+Authorization: Bearer {{teacher_access_token}}
+
+{
+  "title": "Python syntax",
+  "text":  "x = 1 + 1",
+  "order": 1
+}
+
+> {% client.global.set("lecture_slug", response.body.slug); %}

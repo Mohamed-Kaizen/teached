@@ -157,7 +157,7 @@ class Lecture(models.Model):
 
     text = fields.TextField(null=True)
 
-    video = fields.TextField(null=True, max_length=500)
+    video = fields.CharField(null=True, max_length=200)
 
     section = fields.ForeignKeyField(
         model_name="models.Section", on_delete=fields.CASCADE, related_name="lectures",
@@ -165,7 +165,7 @@ class Lecture(models.Model):
 
     order = models.IntField()
 
-    slug = fields.CharField(unique=True, max_length=200)
+    slug = fields.CharField(unique=True, max_length=200, null=True)
 
     created_at = fields.DatetimeField(auto_now_add=True)
 

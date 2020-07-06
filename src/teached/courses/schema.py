@@ -87,3 +87,13 @@ class CreateSection(BaseModel):
     objective: str
 
     order: int
+
+
+class CreateLecture(BaseModel):
+    """Schema for lecture creation data."""
+
+    title: str = Field(..., max_length=100, min_length=1)
+
+    text: Optional[str]
+
+    order: int

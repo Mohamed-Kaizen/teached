@@ -13,6 +13,7 @@ from .models import (  # noqa I202
     CourseDetailPydantic,
     Enrollment,
     Language,
+    Lecture,
     Requirement,
     Review,
     Section,
@@ -330,6 +331,41 @@ async def create_course_section(*, data: Dict, course: Course,) -> Dict:
     return {
         "title": section.title,
         "objective": section.objective,
+        "order": section.order,
+        "slug": section.slug,
+    }
+
+
+async def create_section_lecture(*, data: Dict, section_slug: str) -> Dict:
+    """Create section lecture.
+
+    Args:
+        data: Dict of data for section creation.
+        section_slug: The slug of the section.
+
+    Returns:
+        The created lecture info.
+
+    Raises:
+        HTTPException: if the same lecture was created before.
+    """
+    section = await Section.get(slug=section_slug)
+
+    lecture, created = await Lecture.get_or_create(**data, section=section)
+
+    if not created:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This lecture was been created before",
+        )
+
+    lecture.slug = unique_slug(title=lecture.title)
+    await lecture.save()
+
+    return {
+        "title": lecture.title,
+        "text": lecture.text,
+        "video": lecture.video,
         "order": section.order,
         "slug": section.slug,
     }
