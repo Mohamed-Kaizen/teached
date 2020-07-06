@@ -431,3 +431,33 @@ CourseDetailPydantic = pydantic_model_creator(
         "teacher.user.students",
     ),
 )
+
+StudentCourseListPydantic = pydantic_model_creator(
+    Enrollment,
+    name="StudentCourseList",
+    exclude=(
+        "id",
+        "course.id",
+        "course.overview",
+        "course.video",
+        "course.categories",
+        "course.languages",
+        "course.teacher",
+        "course.announcements",
+        "course.price",
+        "course.discount",
+        "course.is_drift",
+        "course.is_active",
+        "course.book_marks",
+        "course.teacher_id",
+        "course.requirements",
+        "course.reviews",
+        "course.sections",
+        "course.created_at",
+        "course.updated_at",
+        "student",
+        "student_id",
+        "created_at",
+        "updated_at",
+    ),
+)
