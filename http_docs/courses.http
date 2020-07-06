@@ -125,3 +125,12 @@ Authorization: Bearer {{teacher_access_token}}
 }
 
 > {% client.global.set("assignment_slug", response.body.slug); %}
+
+### update course settings
+PATCH http://127.0.0.1:8000/courses/{{course_slug}}/manage/settings/
+Content-Type: application/json
+Authorization: Bearer {{teacher_access_token}}
+
+{
+  "is_drift": false
+}

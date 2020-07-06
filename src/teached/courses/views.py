@@ -21,6 +21,7 @@ from .services import (
     get_published_course,
     get_published_courses,
     reviews_course_list,
+    update_course_settings,
 )
 
 router = APIRouter()
@@ -92,6 +93,18 @@ async def course_review(
 async def get_course_reviews(slug: str) -> List[Dict]:
     """Get all course reviews."""
     return await reviews_course_list(slug=slug)
+
+
+@router.patch("/{slug}/manage/settings/")
+async def course_settings(
+    slug: str,
+    user_input: schema.CourseSettings,
+    auth_user: Teacher = Depends(depends.is_teacher),
+) -> Dict:
+    """Course settings."""
+    return await update_course_settings(
+        teacher=auth_user, data=user_input.dict(exclude_unset=True), slug=slug
+    )
 
 
 @router.post("/{slug}/manage/section/")

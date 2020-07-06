@@ -113,3 +113,15 @@ class CreateAnnouncement(BaseModel):
     title: str = Field(..., max_length=100, min_length=1)
 
     description: str
+
+
+class CourseSettings(BaseModel):
+    """Schema for course settings."""
+
+    is_drift: Optional[bool]
+
+    is_active: Optional[bool]
+
+    price: Optional[float]
+
+    discount: Optional[float]

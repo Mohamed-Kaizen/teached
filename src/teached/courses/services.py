@@ -441,3 +441,26 @@ async def create_section_assignment(*, data: Dict, section_slug: str) -> Dict:
         "file": assignment.file,
         "slug": section.slug,
     }
+
+
+async def update_course_settings(*, data: Dict, teacher: Teacher, slug: str) -> Dict:
+    """Update course settings.
+
+    Args:
+        data: Dict of data for section creation.
+        teacher: Teacher instance.
+        slug: Course slug.
+
+    Returns:
+        The updated settings info.
+    """
+    courses = Course.filter(slug=slug, teacher=teacher)
+    await courses.update(**data)
+    course = await courses.first()
+
+    return {
+        "is_drift": course.is_drift,
+        "price": course.price,
+        "discount": course.discount,
+        "is_active": course.is_active,
+    }
