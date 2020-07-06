@@ -105,3 +105,11 @@ class CreateAssignment(BaseModel):
     title: str = Field(..., max_length=100, min_length=1)
 
     description: str
+
+
+class CreateAnnouncement(BaseModel):
+    """Schema for announcement creation data."""
+
+    title: str = Field(..., max_length=100, min_length=1)
+
+    description: str

@@ -112,3 +112,16 @@ Authorization: Bearer {{teacher_access_token}}
 }
 
 > {% client.global.set("assignment_slug", response.body.slug); %}
+
+
+### create course announcement
+POST http://127.0.0.1:8000/courses/{{course_slug}}/manage/announcement/
+Content-Type: application/json
+Authorization: Bearer {{teacher_access_token}}
+
+{
+  "title": "Update",
+  "description":  "The course will be updated in 2021"
+}
+
+> {% client.global.set("assignment_slug", response.body.slug); %}

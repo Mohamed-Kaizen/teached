@@ -7,6 +7,7 @@ from tortoise import QuerySet
 from teached.users.models import Teacher
 
 from .models import (  # noqa I202
+    Announcement,
     Assignment,
     BookMark,
     Category,
@@ -313,7 +314,7 @@ async def create_course_section(*, data: Dict, course: Course,) -> Dict:
         course: Course instance.
 
     Returns:
-        The create section info.
+        The created section info.
 
     Raises:
         HTTPException: if the same section was created before.
@@ -334,6 +335,42 @@ async def create_course_section(*, data: Dict, course: Course,) -> Dict:
         "objective": section.objective,
         "order": section.order,
         "slug": section.slug,
+    }
+
+
+async def create_course_announcement(
+    *, data: Dict, course: Course, teacher: Teacher
+) -> Dict:
+    """Create course announcement.
+
+    Args:
+        data: Dict of data for section creation.
+        course: Course instance.
+        teacher: Teacher instance.
+
+    Returns:
+        The created announcement info.
+
+    Raises:
+        HTTPException: if the same section was created before.
+    """
+    announcement, created = await Announcement.get_or_create(
+        **data, course=course, teacher=teacher
+    )
+
+    if not created:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This announcement was been created before",
+        )
+
+    announcement.slug = unique_slug(title=announcement.title)
+    await announcement.save()
+
+    return {
+        "title": announcement.title,
+        "description": announcement.description,
+        "slug": announcement.slug,
     }
 
 

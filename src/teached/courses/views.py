@@ -11,6 +11,7 @@ from .models import CourseListPydantic
 from .services import (
     bookmark_a_published_course,
     create_course,
+    create_course_announcement,
     create_course_section,
     create_review_for_published_course,
     create_section_assignment,
@@ -101,6 +102,18 @@ async def section_create(
     """Create new section for a course."""
     _, course = auth_user
     return await create_course_section(course=course, data=user_input.dict())
+
+
+@router.post("/{slug}/manage/announcement/")
+async def announcement_create(
+    user_input: schema.CreateAnnouncement,
+    auth_user: Tuple[Teacher, Course] = Depends(is_owner),
+) -> Dict:
+    """Create new announcement for a course."""
+    teacher, course = auth_user
+    return await create_course_announcement(
+        teacher=teacher, course=course, data=user_input.dict()
+    )
 
 
 @router.post("/{slug}/manage/section/{section_slug}/lecture/")
